@@ -1,0 +1,4 @@
+{
+	"SERVE_PORT": 8181,
+	"SERVE_HOSTNAME": "localhost"
+}
