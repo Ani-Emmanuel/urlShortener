@@ -1,34 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
 // import logo from './logo.svg'
+import { Link, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 
 import config from "./config.json";
 
 const LINKS_URL = `http://${config.SERVE_HOSTNAME}:${config.SERVE_PORT}/api/links`;
-
-// function App() {
-//   return (
-//     <div className='App'>
-//       <header className='App-header'>
-//         <h1>Replace me with shortlinks UI</h1>
-//         <img src={logo} className='App-logo' alt='logo' />
-//         <p>
-//           <a
-//             className='App-link'
-//             onClick={() => {
-//               fetch(LINKS_URL).then(resp => {
-//                 resp.json().then(x => alert(JSON.stringify(x)));
-//               })
-//             }}
-//           >
-//             Alert /api/links
-//           </a>
-//         </p>
-//       </header>
-//     </div>
-//   )
-// }
 
 class App extends Component {
   state = {
@@ -48,7 +26,10 @@ class App extends Component {
         this.setState({
           fetchedUrl: data
         });
-        console.log(this.state.fetchedUrl);
+        this.setState({
+          input: ""
+        });
+        this.getAllUrl();
       })
       .catch(err => {
         throw err;
@@ -60,9 +41,9 @@ class App extends Component {
       .get(LINKS_URL)
       .then(data => {
         this.setState({
-          fetchedUrl: data
+          fetchedUrl: data.data
         });
-        console.log(this.state.fetchedUrl.data);
+        console.log(this.state.fetchedUrl);
       })
       .catch(err => {
         throw err;
@@ -70,50 +51,63 @@ class App extends Component {
   };
   handleChange = event => {
     event.preventDefault();
-    this.setState(
-      {
-        input: event.target.value
-      },
-      () => alert(this.state.input)
-    );
+    this.setState({
+      input: event.target.value
+    });
   };
 
+  getOneUrl = (value) =>{
+    axios
+      .get(`${LINKS_URL}/${value}`, {
+        headers: { "content-Access-Control-Allow-Origin": "*" }
+      })
+      .catch(err => {
+        throw err;
+      });
+  }
   render() {
     return (
-      <div>
-        <h1>Paste the url to shorten here</h1>
+      <div className="App">
+        <h1 className="App-header">Paste the url to shorten here</h1>
         <form onSubmit={this.generateShortenedUrl}>
           <label>
-            URL:
+            <span>URL:</span>
             <input
               type="text"
               value={this.state.input}
               onChange={this.handleChange}
             />
           </label>
-          <input type="submit" value="Shorten" />
+          <input className="btn btn-primary" type="submit" value="Shorten" />
         </form>
 
-        <table>
+        <table
+          id="table"
+          className="table table-dark table-hover table-responsive table-bordered table-striped"
+        >
           <thead>
             <tr>
-              <th>#</th>
-              <th>fullurl</th>
-              <th>short</th>
+              <th>s/n</th>
+              <th>FullUrl</th>
+              <th>ShortUrl</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              {
-              this.state.fetchedUrl.data.map((item, index) => {
-                return (
-                  (<td>{index + 1}</td>),
-                  (<td>(item.fullurl)</td>),
-                  (<td>(item.shorturl)</td>)
-                );
-              })
-              }
-            </tr>
+            {this.state.fetchedUrl.length
+              ? this.state.fetchedUrl.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{item.fullurl}</td>
+                      {/* <Router>
+                        <Link to="/"> */}
+                          <td onClick={this.getOneUrl.bind(this, item.shorturl)}>{item.shorturl}</td>
+                        {/* </Link>
+                      </Router> */}
+                    </tr>
+                  );
+                })
+              : <tr></tr>}
           </tbody>
         </table>
       </div>

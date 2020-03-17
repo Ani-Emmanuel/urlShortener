@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/links', getAllUrl)
 app.post('/api/links', createShortUrl)
-app.get('/api/links:id', getOneUrl)
+app.get('/api/links/:id', getOneUrl)
 
 // catching not found errors
 app.use((req, res, next) => {
