@@ -43,7 +43,6 @@ class App extends Component {
         this.setState({
           fetchedUrl: data.data
         });
-        console.log(this.state.fetchedUrl);
       })
       .catch(err => {
         throw err;
@@ -56,15 +55,16 @@ class App extends Component {
     });
   };
 
-  getOneUrl = (value) =>{
+  getOneUrl = value => {
     axios
-      .get(`${LINKS_URL}/${value}`, {
-        headers: { "content-Access-Control-Allow-Origin": "*" }
+      .get(`${LINKS_URL}/${value}`)
+      .then(url => {
+        window.open(url.data.fullurl, "_blank");
       })
       .catch(err => {
         throw err;
       });
-  }
+  };
   render() {
     return (
       <div className="App">
@@ -93,21 +93,23 @@ class App extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.fetchedUrl.length
-              ? this.state.fetchedUrl.map((item, index) => {
-                  return (
+            {this.state.fetchedUrl.length ? (
+              this.state.fetchedUrl.map((item, index) => {
+                return (
+                  <Router>
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{item.fullurl}</td>
-                      {/* <Router>
-                        <Link to="/"> */}
-                          <td onClick={this.getOneUrl.bind(this, item.shorturl)}>{item.shorturl}</td>
-                        {/* </Link>
-                      </Router> */}
+                      <td onClick={this.getOneUrl.bind(this, item.shorturl)}>
+                        <Link to="">{item.shorturl}</Link>
+                      </td>
                     </tr>
-                  );
-                })
-              : <tr></tr>}
+                  </Router>
+                );
+              })
+            ) : (
+              <tr></tr>
+            )}
           </tbody>
         </table>
       </div>

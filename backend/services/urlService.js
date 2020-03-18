@@ -30,8 +30,8 @@ module.exports = {
     try {
       const { id } = req.params;
       const oneUrl = await UrlModel.findOne({ shorturl: id });
-      return res.redirect(oneUrl.fullurl)
-      // res.status(200).json(oneUrl);
+      // return res.redirect(oneUrl.fullurl)
+      res.status(200).json(oneUrl);
     } catch (error) {
       next(error);
     }
