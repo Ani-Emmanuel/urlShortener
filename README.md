@@ -13,7 +13,7 @@ To get the project working in you system follow this steps:-
 
 - In the root folder create a file with the name **.env**
 
-- In the file create two variables all in SESHSECRET and DB_URL and set them accordingly 
+- In the **.env** file create two variables all in caps SESHSECRET and DB_URL and set them accordingly 
   eg like so:
     - SESHSECRET = your secret
     - DB_URL = your database connection string
