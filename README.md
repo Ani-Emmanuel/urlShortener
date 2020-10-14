@@ -1,7 +1,7 @@
 # About Shortlink Generator
 
 This project is a fullstack project build with Reactjs, Nodejs, Express, Mongodb. 
-The project generates a shortlink out of the fullurl link 
+The project generates a unique short url link out of full url link supplied.
 
 ## Project Requirements
 
